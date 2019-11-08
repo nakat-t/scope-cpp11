@@ -1,0 +1,2 @@
+# scope-guard-cpp
+
