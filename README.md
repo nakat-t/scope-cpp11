@@ -41,7 +41,7 @@ Refer to [P0052r10](http://www.open-std.org/JTC1/SC22/WG21/docs/papers/2019/p005
 
 ### Difference from P0052r10
 
-* Header file name is `scope.hpp` instead of <scope>.
+* Header file name is `scope.hpp` instead of `<scope>`.
 * Namespace is `scope::` instead of `std::`.
 * Added `make_scope_exit()`, `make_scope_success()`, `make_scope_fail()` functions. This extension is for C++11/14 that doesn't have a template deduction guide.
 
