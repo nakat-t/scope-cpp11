@@ -10,7 +10,7 @@ INCLUDE_DIR                 ?= include
 OUT_DIR                     ?= _out
 TEST_DIR                    ?= test
 MAKEFILES_DIR               ?= build/makefiles
-CATCH_DIR                   ?= $(TEST_DIR)/external/catch2
+CATCH_DIR                   ?= external/catch2
 
 DEBUG                       ?= 0
 ARCH                        ?= x86_64-linux-gnu
