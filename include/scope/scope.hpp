@@ -29,7 +29,7 @@
 #include <utility>
 
 #define SCOPE_VERSION_MAJOR 0
-#define SCOPE_VERSION_MINOR 5
+#define SCOPE_VERSION_MINOR 9
 #define SCOPE_VERSION_PATCH 0
 
 #define SCOPE_STR(v) #v
