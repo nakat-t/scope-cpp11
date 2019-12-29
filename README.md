@@ -1,8 +1,8 @@
 # scope-cpp11: A single header-only scope guard library for C++11 or later
 
-scope-cpp11 is an implementation of `scope_exit`, `scope_success`, and `scope_fail` proposed for the C++ standard at by [P0052r10](http://www.open-std.org/JTC1/SC22/WG21/docs/papers/2019/p0052r10.pdf).
+scope-cpp11 is an implementation of `scope_exit`, `scope_success`, `scope_fail` and `unique_resource` proposed for the C++ standard at by [P0052r10](http://www.open-std.org/JTC1/SC22/WG21/docs/papers/2019/p0052r10.pdf).
 
-`scope_exit` is available in C++11 or later. `scope_success` and `scope_fail` are available in C++17 or later (because these require std::uncaught_exceptions()).
+`scope_exit`, `unique_resource` is available in C++11 or later. `scope_success` and `scope_fail` are available in C++17 or later (because these require std::uncaught_exceptions()).
 
 ## Example
 
@@ -25,6 +25,26 @@ void demo_scope_exit_fail_success_in_p0052() {
     } // z called at this point
     assert("called always handled" == out.str());
 }
+
+void demonstrate_unique_resource_with_stdio_in_p0052() {
+    auto fclose = [](auto file){ ::fclose(file); }; // not allowed to take address
+    const std::string filename = "hello.txt";
+    {   auto file = scope::make_unique_resource(::fopen(filename.c_str(), "w"), fclose);
+        ::fputs("Hello World!\n", file.get());
+        assert(file.get() != NULL);
+    }
+    {   std::ifstream input { filename };
+        std::string line { };
+        getline(input, line);
+        assert("Hello World!" == line);
+        getline(input, line);
+        assert(input.eof());
+    }
+    ::remove(filename.c_str());
+    {   auto file = scope::make_unique_resource_checked(::fopen("nonexistingfile.txt", "r"), (FILE*)NULL, fclose);
+        assert(file.get() == NULL);
+    }
+}
 ```
 
 ## Install
@@ -43,11 +63,7 @@ Refer to [P0052r10](http://www.open-std.org/JTC1/SC22/WG21/docs/papers/2019/p005
 
 * Header file name is `scope.hpp` instead of `<scope>`.
 * Namespace is `scope::` instead of `std::`.
-* Added `make_scope_exit()`, `make_scope_success()`, `make_scope_fail()` functions. This extension is for C++11/14 that doesn't have a template deduction guide.
-
-### ToDo
-
-* `unique_resource` and `make_unique_resource_checked()` is not implement in this version.
+* Added `make_scope_exit()`, `make_scope_success()`, `make_scope_fail()`, `make_unique_resource()` functions. This extension is for C++11/14 that doesn't have a template deduction guide.
 
 ## Reference
 
